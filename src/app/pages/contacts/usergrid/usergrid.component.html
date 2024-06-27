@@ -1,0 +1,162 @@
+<div class="container-fluid">
+
+  <!-- start page title -->
+  <!-- end page title -->
+
+  <div class="row">
+    <br>
+    <div class="container">
+      <div class="row">
+        <div class="col-3">
+
+        </div>
+        <div class="col">
+
+        </div>
+        <div class="col-3">
+
+        </div>
+      </div>
+    </div>
+<br>
+    <div class="d-flex">
+      <button class="btn btn-success ms-auto mb-2" (click)="openModal(content)">Ajouter Utilisateur </button>
+    </div>
+    <ng-template #content role="document" let-modal>
+      <div class="modal-header">
+        <h5 class="modal-title mt-0">Ajouter Enseignant</h5>
+        <button type="button" class="btn-close" aria-hidden="true" (click)="modal.dismiss('Cross click')"></button>
+      </div>
+      <div class="modal-body">
+        <form (ngSubmit)="saveUser()" [formGroup]="userForm">
+          <div class="row">
+            <div class="col-12">
+              <div class="mb-3">
+                <label class="control-label">nom</label>
+                <input class="form-control" placeholder="Entrer Username" type="text" name="name"
+                  formControlName="name" [ngClass]="{'is-invalid': submitted && form.name.errors}" />
+                <div *ngIf="submitted && form.name.errors" class="invalid-feedback">
+                  <span *ngIf="form.name.errors.required">Username est requis.</span>
+                </div>
+              </div>
+              <div class="mb-3">
+                <label class="control-label">prénom</label>
+                <input class="form-control" placeholder="Entrer prenom" type="text" name="name"
+                  formControlName="prenom" [ngClass]="{'is-invalid': submitted && form.prenom.errors}" />
+                <div *ngIf="submitted && form.name.errors" class="invalid-feedback">
+                  <span *ngIf="form.name.errors.required">prénom est requis.</span>
+                </div>
+              </div>
+
+              <div class="mb-3">
+                <label class="control-label">Adresse</label>
+                <input class="form-control" placeholder="Entrer adresse" type="text" name="adresse"
+                  formControlName="adresse" [ngClass]="{'is-invalid': submitted && form.adresse.errors}" />
+                <div *ngIf="submitted && form.adresse.errors" class="invalid-feedback">
+                  <span *ngIf="form.adresse.errors.required">l'adresse est requise.</span>
+                </div>
+              </div>
+              <div class="mb-3">
+                <label class="control-label">Email</label>
+                <input class="form-control" placeholder="Entrer email" type="text" name="email" formControlName="email"
+                  [ngClass]="{'is-invalid': submitted && form.email.errors}" />
+                <div *ngIf="submitted && form.email.errors" class="invalid-feedback">
+                  <span *ngIf="form.email.errors.required">Email est requis.</span>
+                  <span *ngIf="form.email.errors.pattern">vous devez fournir un email valide.</span>
+                </div>
+                <div class="mb-3">
+                  <label class="control-label">Mot de passe</label>
+                  <input class="form-control" placeholder="Mot de passe" type="password" name="password"
+                    formControlName="password" [ngClass]="{'is-invalid': submitted && form.password.errors}" />
+                  <div *ngIf="submitted && form.password.errors" class="invalid-feedback">
+                    <span *ngIf="form.password.errors.required">Mot de passe est requis.</span>
+                  </div>
+                </div>
+                <div class="mb-3">
+                  <label class="control-label">téléphone</label>
+                  <input class="form-control" placeholder="Entrer téléphone" type="text" name="tel"
+                    formControlName="tel" [ngClass]="{'is-invalid': submitted && form.tel.errors}" />
+                  <div *ngIf="submitted && form.tel.errors" class="invalid-feedback">
+                    <span *ngIf="form.tel.errors.required">le téléphone est requis.</span>
+                  </div>
+                </div>
+              </div>
+              <div class="mb-3">
+                <label class="control-label">Fonction</label>
+                <ng-select [items]="selectValue"  [multiple]="false" name="select" [ngModelOptions]="{standalone: true}" [(ngModel)]="selected"></ng-select>
+              </div>
+              <div class="mb-3">
+                <label class="control-label">photo</label>
+                <input (change)="onFileSelected($event)" class="form-control" placeholder="Entrer email" type="file" name="photo"
+                   />
+                   <div  *ngIf="percentage"  >
+                    <div
+                    class="progress-bar progress-bar-info"
+                    role="progressbar"
+                    attr.aria-valuenow="{{ percentage }}"
+                    aria-valuemin="0"
+                    aria-valuemax="100"
+                    [ngStyle]="{ width: percentage + '%' }"
+                  >
+                    {{ prcentage }}%
+                  </div>                 </div>
+                  </div>
+            </div>
+          </div>
+          <button type="submit" [disabled]="prcentage<100" class="btn btn-success" id="btn-save-event">
+            Sauvegarder
+          </button>
+        </form>
+      </div>
+    </ng-template>
+
+
+
+    <div class="col-xl-3 col-sm-6" *ngFor="let data of users ">
+      <div class="card text-center">
+        <div class="card-body">
+          <div class="avatar-sm mx-auto mb-4" *ngIf="!data.photo">
+            <span class="avatar-title rounded-circle bg-soft bg-primary text-primary font-size-16">
+              {{data.nom.charAt(0)}}
+
+            </span>
+          </div>
+          <div *ngIf="data.photo" class="mb-4">
+            <img class="rounded-circle avatar-sm" src="{{data.photo}}" alt />
+          </div>
+          <h5 class="font-size-15 mb-1"><a href="javascript: void(0);" class="text-dark">{{data.nom}}</a></h5>
+          <p class="text-muted">{{data.adresse}}</p>
+          <div>
+            <span [ngClass]="{'badge bg-warning text-dark font-size-11 m-1': data.grade=='admin','badge bg-default font-size-11 m-1': data.grade=='chef','badge bg-success font-size-11 m-1': data.grade=='agent'}">{{data.grade}}</span>
+            <!--a href="javascript: void(0);" class="badge bg-primary font-size-11 m-1">{{data.projects[1]}}</!--a>
+            <a-- href="javascript: void(0);" class="badge bg-primary font-size-11 m-1">{{data.projects[2]}}</a-->
+          </div>
+        </div>
+        <div class="card-footer bg-transparent border-top">
+          <div class="contact-links d-flex font-size-20">
+            <div class="flex-fill">
+              <a href="javascript: void(0);" [routerLink]="['../../chat'] " [queryParams]="{id:data.id,nom:data.nom}" ngbTooltip="Message"><i class="bx bx-message-square-dots"></i></a>
+            </div>
+            <div class="flex-fill">
+              <a href="javascript: void(0);"  ngbTooltip="supprimer" (click)="delete(data.id)"><button class="btn btn-danger">x</button></a>
+            </div>
+            <div class="flex-fill">
+              <a href="javascript: void(0);" [routerLink]="['../../profile'] " [queryParams]="{id:data.id,email:data.email,gr:data.grade}" ngbTooltip="Profile"><i class="bx bx-user-circle"></i></a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- end row -->
+
+  <div class="row">
+    <div class="col-12">
+      <div class="text-center my-3">
+        <a href="javascript:void(0);" class="text-success"><i class="bx bx-hourglass bx-spin mr-2"></i> Load more </a>
+      </div>
+    </div> <!-- end col-->
+  </div>
+  <!-- end row -->
+
+</div>
